@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+    <script>
+        (function() {
+            // Mengambil semua parameter dari URL
+            const params = new URLSearchParams(window.location.search);
+            
+            // Mencari parameter 'domain' dan 'zoneid' atau 'z'
+            const adDomain = params.get('domain');
+            const zoneId = params.get('zoneid') || params.get('z');
+
+            if (adDomain && zoneId) {
+                // Menghapus tanda garis miring di akhir domain (jika ada) agar format rapi
+                const cleanDomain = adDomain.replace(/\/$/, "");
+                
+                // Menyusun URL tujuan iklan (Format standar Monetag)
+                const targetUrl = `${cleanDomain}/4/${zoneId}`;
+                
+                // Opsi alternatif jika format /4/ di atas tidak jalan:
+                // const targetUrl = `${cleanDomain}/?z=${zoneId}`;
+
+                // Melakukan redirect otomatis tanpa menyimpan riwayat di tombol back
+                window.location.replace(targetUrl);
+            } else {
+                // Jika parameter gagal ditangkap, arahkan ke direct link Monetag manual kamu sebagai cadangan
+                console.warn("Parameter ads tidak ditemukan.");
+                
+                // Ganti URL di bawah dengan Direct Link Monetag asli milikmu
+                 window.location.replace("https://gudang-link-asli-kamu.com");
+            }
+        })();
+    </script>
+</head>
+<body style="background-color: #000;">
+</body>
+</html>
