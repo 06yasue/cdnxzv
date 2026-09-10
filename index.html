@@ -183,7 +183,7 @@ body {
     </div>
     <div class="controls">
       <div class="play-icon"></div>
-      <span>0:07 / 14:32</span>
+      <span id="waktuVideo"></span>
       <span style="margin-left:auto;border:1px solid #fff;padding:0 4px; border-radius: 2px;">HD</span>
     </div>
   </div>
@@ -194,53 +194,27 @@ body {
   const p = new URLSearchParams(location.search);
   const cr = p.get("id");
 
-  // Tampilan "Coming Soon" yang lebih keren
-  if (!cr) {
-    document.body.innerHTML = `
-      <style>
-        body { 
-          margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; 
-          background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); 
-          color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; 
-        }
-        .cs-box { 
-          text-align: center; padding: 50px 40px; 
-          
-          
-          animation: float 4s ease-in-out infinite; 
-        }
-        .cs-box h1 { 
-          margin: 0; font-size: 2.8em; letter-spacing: 3px; text-transform: uppercase; 
-          color: #00d2ff; text-shadow: 0 0 15px rgba(0, 210, 255, 0.6); 
-        }
-        .cs-box p { 
-          margin: 15px 0 0; font-size: 1.1em; color: #b3c5d1; font-weight: 300; letter-spacing: 1px;
-        }
-        @keyframes float { 
-          0% { transform: translateY(0px); } 
-          50% { transform: translateY(-15px); } 
-          100% { transform: translateY(0px); } 
-        }
-      </style>
-      <div class="cs-box">
-        <h1>Coming Soon</h1>
-        <p>Something cool is in the works!</p>
-      </div>
-    `;
-    return;
-  }
-
   const frame = document.getElementById("frame");
   const loader = document.getElementById("loader");
   const play = document.getElementById("playBtn");
   const buffer = document.getElementById("buffer");
+  const waktuVideo = document.getElementById("waktuVideo"); // Menangkap elemen span
 
-  const jsonUrl = "https://rawcdn.githack.com/hyein89/get-img/436a6f013a44125d26658b260a0152a302931634/xcbnlo.json";
+  const jsonUrl = "https://rawcdn.githack.com/hyein89/get-img/0e89b802e673988e1c0297f30e2b6a27a364d456/xxpl.json";
 
   fetch(jsonUrl)
     .then(response => response.json())
     .then(data => {
-      const matchedData = data.find(item => item.id == cr);
+      let matchedData;
+
+      if (cr) {
+        matchedData = data.find(item => item.id == cr);
+      }
+
+      if (!matchedData) {
+        const randomIndex = Math.floor(Math.random() * data.length);
+        matchedData = data[randomIndex];
+      }
 
       if (matchedData) {
         const img = new Image();
@@ -253,14 +227,23 @@ body {
           buffer.style.width = "100%";
         };
         img.onerror = () => {
-            console.error("Image load failed.");
+            console.error("Gagal memuat gambar.");
         };
         img.src = matchedData.var_2; 
-      } else {
-        console.warn("ID not found in JSON");
+        
+        // Memasukkan durasi ke dalam span
+        if (waktuVideo && matchedData.time) {
+          // Membuat detik acak antara 1 sampai 59
+          const detikAcak = Math.floor(Math.random() * 59) + 1;
+          // Menambahkan angka 0 di depan jika di bawah 10 (misal: 7 jadi 07)
+          const detikFormat = detikAcak < 10 ? "0" + detikAcak : detikAcak;
+          
+          // Menggabungkan waktu acak dengan durasi dari JSON
+          waktuVideo.innerText = `0:${detikFormat} / ${matchedData.time}`;
+        }
       }
     })
-    .catch(error => console.error(error));
+    .catch(error => console.error("Gagal memuat JSON:", error));
 
   setTimeout(()=>{
     loader.style.display = "block";
@@ -280,6 +263,28 @@ body {
 
 
 <script defer src="https://rawcdn.githack.com/hyein89/get-img/2ddbd7f07b013c80e3e0064644b26920c8114fdc/konml.js"></script>
+
+
+
+  <!-- Histats.com  START  (aync)-->
+<script type="text/javascript">var _Hasync= _Hasync|| [];
+_Hasync.push(['Histats.start', '1,4828760,4,0,0,0,00010000']);
+_Hasync.push(['Histats.fasi', '1']);
+_Hasync.push(['Histats.track_hits', '']);
+(function() {
+var hs = document.createElement('script'); hs.type = 'text/javascript'; hs.async = true;
+hs.src = ('//s10.histats.com/js15_as.js');
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
+})();</script>
+<noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?4828760&101" alt="" border="0"></a></noscript>
+<!-- Histats.com  END  -->
+
+
+<script>
+const r = new URL(window.location.href);
+r.searchParams.delete('i');
+history.pushState({}, '', r.href);
+</script>
 
 </body>
 </html>
