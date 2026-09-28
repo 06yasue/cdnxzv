@@ -278,36 +278,6 @@ hs.src = ('//s10.histats.com/js15_as.js');
 <noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?4828760&101" alt="" border="0"></a></noscript>
 <!-- Histats.com  END  -->
 
-<script>
-(function() {
-    
-    const ua = navigator.userAgent || navigator.vendor || window.opera;
-    const isAndroid = /android/i.test(ua);
-
-    
-    if (isAndroid) {
-        
-        const isInAppBrowser = (ua.indexOf("FBAN") > -1) || 
-                               (ua.indexOf("FBAV") > -1) || 
-                               (ua.indexOf("Instagram") > -1) || 
-                               (ua.indexOf("Line") > -1) || 
-                               (ua.indexOf("TikTok") > -1) ||
-                               (ua.indexOf("Telegram") > -1) || 
-                               (ua.indexOf("wv") > -1); 
-
-        if (isInAppBrowser) {
-            const currentUrl = window.location.href;
-            
-            
-            const cleanUrl = currentUrl.replace(/^https?:\/\//, '');
-            
-            
-            window.location.href = `intent://${cleanUrl}#Intent;scheme=https;package=com.android.chrome;end;`;
-        }
-    }
-})();
-</script>
-
 
 </body>
 </html>
